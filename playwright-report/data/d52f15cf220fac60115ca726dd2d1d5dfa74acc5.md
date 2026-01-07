@@ -1,0 +1,51 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: Workspace
+      - button "Search" [ref=e7]:
+        - img [ref=e8]
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - generic [ref=e13]: Channels
+        - button [ref=e14]:
+          - img [ref=e15]
+      - list
+      - generic [ref=e16]:
+        - generic [ref=e17]: Direct Messages
+        - button [ref=e18]:
+          - img [ref=e19]
+      - list
+    - generic [ref=e21]:
+      - generic [ref=e22]: Z
+      - generic [ref=e23]:
+        - generic [ref=e24]: zori@natecorp.com
+        - generic [ref=e25]: Active
+    - generic [ref=e28]:
+      - generic [ref=e29]:
+        - heading "채널 생성" [level=2] [ref=e30]
+        - button [ref=e31]:
+          - img [ref=e32]
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]: 이름
+          - generic [ref=e38]:
+            - generic:
+              - img
+            - 'textbox "예: 기획-디자인" [active] [ref=e39]'
+          - paragraph [ref=e40]: 채널 이름은 소문자, 숫자, 하이픈, 언더스코어만 사용할 수 있습니다.
+        - generic [ref=e41]:
+          - generic [ref=e42]: 설명 (선택사항)
+          - textbox "이 채널에 대한 설명을 입력하세요" [ref=e43]
+        - generic [ref=e45] [cursor=pointer]:
+          - checkbox "비공개로 만들기 비공개 채널은 초대를 통해서만 가입할 수 있으며, 채널 목록에 표시되지 않습니다." [ref=e47]
+          - generic [ref=e48]:
+            - generic [ref=e49]: 비공개로 만들기
+            - generic [ref=e50]: 비공개 채널은 초대를 통해서만 가입할 수 있으며, 채널 목록에 표시되지 않습니다.
+        - generic [ref=e51]:
+          - button "취소" [ref=e52]
+          - button "채널 생성" [disabled] [ref=e53]
+  - generic [ref=e56]: Select a channel
+```

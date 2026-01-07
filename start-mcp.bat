@@ -1,0 +1,4 @@
+@echo off
+set SCREENSHOT_ENCRYPTION_KEY=b9cd8a2023ca51b9fbdc3ad9345588e92c909c42a93a52b7887078039c822620
+npx electron-mcp-server
+
