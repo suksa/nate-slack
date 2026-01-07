@@ -3,9 +3,15 @@ import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { MakerDeb } from '@electron-forge/maker-deb';
 import { MakerRpm } from '@electron-forge/maker-rpm';
+import { PublisherGithub } from '@electron-forge/publisher-github';
 import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
+import { config as loadEnv } from 'dotenv';
+import { resolve } from 'path';
+
+// .env 파일 로드
+loadEnv({ path: resolve(__dirname, '.env') });
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -64,6 +70,16 @@ const config: ForgeConfig = {
       [FuseV1Options.EnableNodeCliInspectArguments]: true, // Changed for testing
       [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
       [FuseV1Options.OnlyLoadAppFromAsar]: false, // Changed for testing
+    }),
+  ],
+  publishers: [
+    new PublisherGithub({
+      repository: {
+        owner: 'suksa',
+        name: 'nate-slack',
+      },
+      // GitHub Personal Access Token은 환경변수 GITHUB_TOKEN으로 설정
+      // 또는 .env 파일에 GITHUB_TOKEN=your_token 추가
     }),
   ],
 };

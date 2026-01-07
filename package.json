@@ -18,6 +18,10 @@
     "email": "zori@sk.com"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suksa/nate-slack.git"
+  },
   "build": {
     "protocols": [
       {
@@ -37,6 +41,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.10.2",
     "@electron-forge/plugin-fuses": "^7.10.2",
     "@electron-forge/plugin-vite": "^7.10.2",
+    "@electron-forge/publisher-github": "^7.10.2",
     "@electron/fuses": "^1.8.0",
     "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "^4.1.18",
@@ -47,6 +52,7 @@
     "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-react": "^5.1.2",
     "autoprefixer": "^10.4.23",
+    "dotenv": "^16.6.1",
     "electron": "39.2.7",
     "eslint": "^8.57.1",
     "eslint-import-resolver-typescript": "^4.4.4",
@@ -64,6 +70,7 @@
     "clsx": "^2.1.1",
     "electron-is-dev": "^3.0.1",
     "electron-squirrel-startup": "^1.0.1",
+    "electron-updater": "^6.1.7",
     "lucide-react": "^0.562.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",

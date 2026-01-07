@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain, Tray, nativeImage, Menu } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
+import { autoUpdater } from 'electron-updater';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -264,6 +265,104 @@ ipcMain.handle('window-is-maximized', () => {
   return mainWindow?.isMaximized() ?? false;
 });
 
+// 자동 업데이트 설정
+function setupAutoUpdater() {
+  // 개발 환경에서는 자동 업데이트 비활성화
+  if (process.env.NODE_ENV === 'development' || !app.isPackaged) {
+    console.log('개발 환경: 자동 업데이트 비활성화');
+    return;
+  }
+
+  // GitHub Releases를 사용하도록 설정
+  autoUpdater.setFeedURL({
+    provider: 'github',
+    owner: 'suksa',
+    repo: 'nate-slack',
+  });
+
+  // 업데이트 확인 주기 (1시간마다)
+  setInterval(() => {
+    autoUpdater.checkForUpdatesAndNotify();
+  }, 60 * 60 * 1000);
+
+  // 앱 시작 시 업데이트 확인
+  autoUpdater.checkForUpdatesAndNotify();
+
+  // 업데이트 이벤트 핸들러
+  autoUpdater.on('checking-for-update', () => {
+    console.log('업데이트 확인 중...');
+    if (mainWindow) {
+      mainWindow.webContents.send('update-status', { status: 'checking' });
+    }
+  });
+
+  autoUpdater.on('update-available', (info: { version: string }) => {
+    console.log('업데이트 사용 가능:', info.version);
+    if (mainWindow) {
+      mainWindow.webContents.send('update-status', {
+        status: 'available',
+        version: info.version,
+      });
+    }
+  });
+
+  autoUpdater.on('update-not-available', (info: { version: string }) => {
+    console.log('최신 버전입니다:', info.version);
+    if (mainWindow) {
+      mainWindow.webContents.send('update-status', {
+        status: 'not-available',
+        version: info.version,
+      });
+    }
+  });
+
+  autoUpdater.on('error', (err: Error) => {
+    console.error('업데이트 오류:', err);
+    if (mainWindow) {
+      mainWindow.webContents.send('update-status', {
+        status: 'error',
+        error: err.message,
+      });
+    }
+  });
+
+  autoUpdater.on('download-progress', (progressObj: { percent: number; transferred: number; total: number }) => {
+    const message = `다운로드 진행률: ${Math.round(progressObj.percent)}%`;
+    console.log(message);
+    if (mainWindow) {
+      mainWindow.webContents.send('update-progress', {
+        percent: Math.round(progressObj.percent),
+        transferred: progressObj.transferred,
+        total: progressObj.total,
+      });
+    }
+  });
+
+  autoUpdater.on('update-downloaded', (info: { version: string }) => {
+    console.log('업데이트 다운로드 완료:', info.version);
+    if (mainWindow) {
+      mainWindow.webContents.send('update-status', {
+        status: 'downloaded',
+        version: info.version,
+      });
+    }
+    // 사용자에게 재시작 옵션 제공
+    // autoUpdater.quitAndInstall()을 호출하여 재시작
+  });
+}
+
+// IPC 핸들러: 업데이트 재시작
+ipcMain.handle('restart-and-install-update', () => {
+  autoUpdater.quitAndInstall();
+});
+
+// IPC 핸들러: 수동 업데이트 확인
+ipcMain.handle('check-for-updates', () => {
+  if (app.isPackaged) {
+    autoUpdater.checkForUpdatesAndNotify();
+  }
+});
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -279,6 +378,9 @@ app.on('ready', () => {
   } else {
     app.setAsDefaultProtocolClient(PROTOCOL);
   }
+
+  // 자동 업데이트 설정
+  setupAutoUpdater();
 
   // 트레이 아이콘 생성
   createTray();
